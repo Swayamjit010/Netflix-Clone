@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .drop-zone {
+            margin: 10px 0;
+            padding: 20px;
+            border: 2px dashed #45f3ff;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            color: #45f3ff;
+            background: #18181f;
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.dragover {
+            background-color: #23235b;
+            border-color: #ff2770;
+            color: #ff2770;
+        }
+        
+        .form-label {
+            margin: 10px 0 5px 0;
+            display: block;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #333;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 4px;
+        }
+        
+        select[multiple] {
+            height: 90px;
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: #e50914;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 0;
+            margin-top: 10px;
+            font-size: 1.1em;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background: #45f3ff;
+            color: #23235b;
+        }
+        
+        .movie-card {
+            background: #181818;
+            border-radius: 8px;
+            padding: 10px;
+            width: 170px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            margin: 10px;
+        }
+        
+        .movie-card img {
+            width: 100%;
+            border-radius: 4px;
+        }
+        
+        .delete-btn {
+            background: #e50914;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        
+        #moviesList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            background: #23235b;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 0;
+            margin-top: 30px;
+            font-size: 1.1em;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: #e50914;
+            color: #fff;
+        }
+        
+        .seasons-container {
+            margin: 15px 0;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            background: #18181f;
+        }
+        
+        .season-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #23235b;
+            border-radius: 6px;
+        }
+        
+        .season-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .episodes-container {
+            margin-top: 10px;
+        }
+        
+        .episode-fields {
+            margin-bottom: 10px;
+        }
+        
+        .add-episode-btn,
+        .remove-episode-btn,
+        .add-season-btn,
+        .remove-season-btn {
+            background: #45f3ff;
+            color: #23235b;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right: 8px;
+        }
+        
+        .add-episode-btn:hover,
+        .add-season-btn:hover {
+            background: #38c4d0;
+        }
+        
+        .remove-episode-btn,
+        .remove-season-btn {
+            background: #e50914;
+            color: #fff;
+        }
+        
+        .remove-episode-btn:hover,
+        .remove-season-btn:hover {
+            background: #b00610;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar__brand">
+            <img src="https://www.freepnglogos.com/uploads/netflix-logo-0.png" alt="Netflix" class="brand__logo">
+        </div>
+        <div class="navbar__nav__items">
+            <a href="../index.html">Home</a>
+            <a href="../login.html">Login</a>
+            <a href="../signup.html">Sign Up</a>
+            <a href="dashboard.html">Admin</a>
+        </div>
+    </nav>
+    <div class="auth-page">
+        <div class="auth-container" style="max-width:600px;">
+            <h1>Admin Dashboard</h1>
+            <label class="form-label" for="addType">Add Type</label>
+            <select id="addType" required>
+                <option value="movie">Movie</option>
+                <option value="trailer">Trailer</option>
+                <option value="webseries">Web Series</option>
+            </select>
+
+            <!-- Movie Form -->
+            <form id="addMovieForm" style="display: block;">
+                <label class="form-label" for="movieTitle">Movie Title</label>
+                <input type="text" id="movieTitle" placeholder="Movie Title" required>
+
+                <label class="form-label" for="movieDescription">Movie Description</label>
+                <input type="text" id="movieDescription" placeholder="Movie plot summary" required>
+
+                <div class="form-row" style="display:flex; gap:10px;">
+                    <div style="flex:1;">
+                        <label class="form-label" for="movieYear">Release Year</label>
+                        <input type="number" id="movieYear" min="1900" max="2100" placeholder="2024" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label class="form-label" for="movieRating">IMDb Rating</label>
+                        <input type="number" id="movieRating" step="0.1" min="0" max="10" placeholder="8.5" required>
+                    </div>
+                </div>
+
+                <label class="form-label" for="movieGenres">Genres (comma separated)</label>
+                <input type="text" id="movieGenres" placeholder="Action, Drama, Comedy" required>
+
+                <label class="form-label" for="movieCategories">Categories (select one or more)</label>
+                <select id="movieCategories" multiple required>
+                    <option value="POPULAR">Popular Movies</option>
+                    <option value="LATEST">Latest Movies</option>
+                    <option value="ALL">All Movies</option>
+                    <option value="UPCOMING">Upcoming Movies</option>
+                </select>
+
+                <label class="form-label">Movie Poster</label>
+                <div id="dropZone" class="drop-zone">
+                    Drag and drop an image here, or click to select
+                </div>
+                <input type="file" id="movieFile" accept="image/*" style="display: none;">
+                <input type="text" id="movieImage" placeholder="Or paste Image URL here" required>
+
+                <label class="form-label" for="movieVideo">Movie Video URL</label>
+                <input type="text" id="movieVideo" placeholder="Paste your video URL here (e.g. Firebase Storage URL)" required>
+
+                <button type="submit" class="submit-btn">Add Movie</button>
+            </form>
+
+            <!-- Trailer Form -->
+            <form id="addTrailerForm" style="display: none;">
+                <label class="form-label" for="trailerTitle">Trailer Title</label>
+                <input type="text" id="trailerTitle" placeholder="Trailer Title" required>
+
+                <label class="form-label" for="trailerDescription">Trailer Description</label>
+                <input type="text" id="trailerDescription" placeholder="Trailer Description" required>
+
+                <label class="form-label" for="trailerType">Trailer For</label>
+                <select id="trailerType" required>
+                    <option value="movie">Movie</option>
+                    <option value="webseries">Web Series</option>
+                </select>
+
+                <label class="form-label">Trailer Thumbnail</label>
+                <div id="trailerDropZone" class="drop-zone">
+                    Drag and drop an image here, or click to select
+                </div>
+                <input type="file" id="trailerFile" accept="image/*" style="display: none;">
+                <input type="text" id="trailerImage" placeholder="Or paste Image URL here" required>
+
+                <label class="form-label" for="trailerVideoUrl">Trailer Video URL</label>
+                <input type="text" id="trailerVideoUrl" placeholder="Paste your video URL here (e.g. Firebase Storage URL)" required>
+
+                <label class="form-label" for="trailerReleaseDate">Release Date</label>
+                <input type="text" id="trailerReleaseDate" placeholder="YYYY-MM-DD or COMING SOON" required>
+
+                <button type="submit" class="submit-btn">Add Trailer</button>
+            </form>
+
+            <!-- Web Series Form -->
+            <form id="addWebSeriesForm" style="display: none;">
+                <label class="form-label" for="webSeriesTitle">Web Series Title</label>
+                <input type="text" id="webSeriesTitle" placeholder="Web Series Title" required>
+
+                <label class="form-label" for="webSeriesDescription">Web Series Description</label>
+                <input type="text" id="webSeriesDescription" placeholder="Plot summary" required>
+
+                <div class="form-row" style="display:flex; gap:10px;">
+                    <div style="flex:1;">
+                        <label class="form-label" for="webSeriesYear">Release Year</label>
+                        <input type="number" id="webSeriesYear" min="1900" max="2100" placeholder="2024" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label class="form-label" for="webSeriesGenres">Genres (comma separated)</label>
+                        <input type="text" id="webSeriesGenres" placeholder="Action, Drama, Comedy" required>
+                    </div>
+                </div>
+
+                <label class="form-label" for="webSeriesCategories">Categories (select one or more)</label>
+                <select id="webSeriesCategories" multiple required>
+                    <option value="POPULAR">Popular Series</option>
+                    <option value="LATEST">Latest Series</option>
+                    <option value="ALL">All Series</option>
+                    <option value="UPCOMING">Upcoming Series</option>
+                </select>
+
+                <label class="form-label">Web Series Poster</label>
+                <div id="dropZoneWeb" class="drop-zone">
+                    Drag and drop an image here, or click to select
+                </div>
+                <input type="file" id="webSeriesFile" accept="image/*" style="display: none;">
+                <input type="text" id="webSeriesImage" placeholder="Or paste Image URL here" required>
+
+                <div class="seasons-container" id="seasonsContainer">
+                    <!-- Seasons and episodes will be dynamically added here -->
+                </div>
+                <button type="button" id="addSeasonBtn" class="add-season-btn">Add Season</button>
+
+                <button type="submit" class="submit-btn">Add Web Series</button>
+            </form>
+
+            <div id="moviesList"></div>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <script type="module" src="../js/movies.js"></script>
+    <script>
+        // Toggle forms based on addType selection
+        document.getElementById('addType').addEventListener('change', function() {
+            document.getElementById('addMovieForm').style.display = this.value === 'movie' ? 'block' : 'none';
+            document.getElementById('addTrailerForm').style.display = this.value === 'trailer' ? 'block' : 'none';
+            document.getElementById('addWebSeriesForm').style.display = this.value === 'webseries' ? 'block' : 'none';
+        });
+
+        // Drag and drop for movie poster
+        const dropZone = document.getElementById('dropZone');
+        const movieFile = document.getElementById('movieFile');
+        dropZone.addEventListener('click', () => movieFile.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                movieFile.files = e.dataTransfer.files;
+            }
+        });
+
+        // Drag and drop for trailer thumbnail
+        const trailerDropZone = document.getElementById('trailerDropZone');
+        const trailerFile = document.getElementById('trailerFile');
+        trailerDropZone.addEventListener('click', () => trailerFile.click());
+        trailerDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            trailerDropZone.classList.add('dragover');
+        });
+        trailerDropZone.addEventListener('dragleave', () => trailerDropZone.classList.remove('dragover'));
+        trailerDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            trailerDropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                trailerFile.files = e.dataTransfer.files;
+            }
+        });
+
+        // Drag and drop for webseries poster
+        const dropZoneWeb = document.getElementById('dropZoneWeb');
+        const webSeriesFile = document.getElementById('webSeriesFile');
+        dropZoneWeb.addEventListener('click', () => webSeriesFile.click());
+        dropZoneWeb.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZoneWeb.classList.add('dragover');
+        });
+        dropZoneWeb.addEventListener('dragleave', () => dropZoneWeb.classList.remove('dragover'));
+        dropZoneWeb.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZoneWeb.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                webSeriesFile.files = e.dataTransfer.files;
+            }
+        });
+
+        // Dynamic seasons/episodes for webseries
+        let seasonCount = 0;
+        document.getElementById('addSeasonBtn').addEventListener('click', function() {
+            seasonCount++;
+            const seasonDiv = document.createElement('div');
+            seasonDiv.className = 'season-item';
+            seasonDiv.dataset.season = seasonCount;
+            seasonDiv.innerHTML = `
+                <div class="season-header">
+                    <strong>Season ${seasonCount}</strong>
+                    <button type="button" class="remove-season-btn">Remove Season</button>
+                </div>
+                <div class="episodes-container"></div>
+                <button type="button" class="add-episode-btn">Add Episode</button>
+            `;
+            document.getElementById('seasonsContainer').appendChild(seasonDiv);
+
+            // Add episode logic
+            seasonDiv.querySelector('.add-episode-btn').addEventListener('click', function() {
+                const episodesContainer = seasonDiv.querySelector('.episodes-container');
+                const episodeDiv = document.createElement('div');
+                episodeDiv.className = 'episode-fields';
+                episodeDiv.innerHTML = `
+                    <input type="text" class="episode-title" placeholder="Episode Title" required>
+                    <input type="text" class="episode-url" placeholder="Paste episode video URL here" required>
+                    <button type="button" class="remove-episode-btn">Remove Episode</button>
+                `;
+                episodesContainer.appendChild(episodeDiv);
+
+                // Remove episode logic
+                episodeDiv.querySelector('.remove-episode-btn').addEventListener('click', function() {
+                    episodeDiv.remove();
+                });
+            });
+
+            // Remove season logic
+            seasonDiv.querySelector('.remove-season-btn').addEventListener('click', function() {
+                seasonDiv.remove();
+            });
+        });
+    </script>
+</body>
+
+</html>
